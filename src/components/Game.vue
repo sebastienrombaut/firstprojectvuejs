@@ -18,6 +18,8 @@
 
 <script>
 
+import localStorage from "@/services/localStorage.js"
+
 export default {
   name: 'game',
 
@@ -27,6 +29,8 @@ export default {
       money: 0,
       price_per_cookie: 1,
       factoryPrice: 10,
+      saveTimerId: null,
+      buyingTimerId: null,
     }
   },
 
@@ -42,18 +46,38 @@ export default {
     },
 
     initBuyingTimer () {
-      setInterval(() => { //arrow_function
+      this.buyingTimerId = setInterval(() => { //arrow_function
         if(this.nbCookies > 0) {
           this.nbCookies -= 1
           this.money += this.price_per_cookie
         }
       }, 1000)
+    },
+
+    initSaveTimer () {
+      this.saveTimerId = setInterval(() => { //arrow_function
+        localStorage.saveProgression (this.nbCookies, this.money)
+      }, 1000)
+    },
+
+    initProgression () {
+      const progression = localStorage.loadProgression()
+      this.nbCookies = progression.nbCookies
+      this.money = progression.money
+
+      this.initSaveTimer()
     }
   },
 
   mounted () {
     this.initBuyingTimer()
+    this.initProgression()
   },
+
+  beforeDestroy () {
+    clearInterval(this.buyingTimerId)
+    clearInterval(this.saveTimerId)
+  }
 };
 
 </script>

@@ -11,21 +11,30 @@
     <p>Price per cookie : {{ price_per_cookie }} €</p>
 
     <div v-if="canBuyFactory">
-      <button>Acheter factory ?</button>
+      <button @click="buyFactory">Acheter factory ?</button>
     </div>
 
     <div>
       <button @click="resetGame">Reset</button>
     </div>
+
+    <cookie-factory
+      v-for="(i, index) in factories"
+      :key="index"/>
   </div>
 </template>
 
 <script>
 
+import CookieFactory from "@/components/CookieFactory"
 import localStorage from "@/services/localStorage.js"
 
 export default {
   name: 'game',
+
+  components: {
+    CookieFactory
+  },
 
   data () {
     return {
@@ -35,12 +44,13 @@ export default {
       factoryPrice: 10,
       saveTimerId: null,
       buyingTimerId: null,
+      factories: [],
     }
   },
 
   computed: {
     canBuyFactory () {
-      return this.money > this.factoryPrice
+      return this.money >= this.factoryPrice
     }
   },
 
@@ -74,6 +84,13 @@ export default {
       this.nbCookies = 0
       this.money = 0
     },
+
+    buyFactory () {
+      if (this.money >= this.factoryPrice) {
+        this.money -= this.factoryPrice
+        this.factories.push(1)
+      }
+    }
   },
 
   mounted () {

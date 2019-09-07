@@ -6,7 +6,9 @@
       <img class="cookie_image" src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRSBDKzOQPWkG8jDyo_ybq0uYzt98I7CSVR9RQrEAlqH4-qWyqy4w"/>
     </button>
 
-    <p>{{ nbCookies }}</p>
+    <p>Unsold inventory : {{ nbCookies }}</p>
+    <p>Available funds : {{ money }} €</p>
+    <p>Price per cookie : {{ price_per_cookie }} €</p>
   </div>
 </template>
 
@@ -15,17 +17,36 @@
 export default {
   name: 'game',
 
-  data() {
+  data () {
     return {
-      nbCookies: 0
+      nbCookies: 0,
+      money: 0,
+      price_per_cookie: 1,
     }
   },
 
+  computed: {
+
+  },
+
   methods: {
-    addCookies() {
+    addCookies () {
       this.nbCookies += 1
+    },
+
+    initBuyingTimer () {
+      setInterval(() => { //arrow_function
+        if(this.nbCookies > 0) {
+          this.nbCookies -= 1
+          this.money += this.price_per_cookie
+        }
+      }, 1000)
     }
-  }
+  },
+
+  mounted () {
+    this.initBuyingTimer()
+  },
 };
 
 </script>

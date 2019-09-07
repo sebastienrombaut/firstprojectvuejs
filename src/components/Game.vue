@@ -9,6 +9,10 @@
     <p>Unsold inventory : {{ nbCookies }}</p>
     <p>Available funds : {{ money }} €</p>
     <p>Price per cookie : {{ price_per_cookie }} €</p>
+
+    <div v-if="canBuyFactory">
+      Je suis une factory
+    </div>
   </div>
 </template>
 
@@ -22,11 +26,14 @@ export default {
       nbCookies: 0,
       money: 0,
       price_per_cookie: 1,
+      factoryPrice: 10,
     }
   },
 
   computed: {
-
+    canBuyFactory () {
+      return this.money > this.factoryPrice
+    }
   },
 
   methods: {

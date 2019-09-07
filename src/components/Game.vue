@@ -64,14 +64,13 @@ export default {
       const progression = localStorage.loadProgression()
       this.nbCookies = progression.nbCookies
       this.money = progression.money
-
-      this.initSaveTimer()
     }
   },
 
   mounted () {
     this.initBuyingTimer()
     this.initProgression()
+    this.initSaveTimer()
   },
 
   beforeDestroy () {

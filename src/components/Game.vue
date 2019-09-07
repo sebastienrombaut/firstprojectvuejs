@@ -11,7 +11,11 @@
     <p>Price per cookie : {{ price_per_cookie }} €</p>
 
     <div v-if="canBuyFactory">
-      Je suis une factory
+      <button>Acheter factory ?</button>
+    </div>
+
+    <div>
+      <button @click="resetGame">Reset</button>
     </div>
   </div>
 </template>
@@ -64,7 +68,12 @@ export default {
       const progression = localStorage.loadProgression()
       this.nbCookies = progression.nbCookies
       this.money = progression.money
-    }
+    },
+
+    resetGame () {
+      this.nbCookies = 0
+      this.money = 0
+    },
   },
 
   mounted () {
@@ -98,7 +107,7 @@ export default {
 }
 
 .button_cookie:active {
-  transform: translateY( 5px);
+  transform: translateY(5px);
 }
 
 .cookie_image {

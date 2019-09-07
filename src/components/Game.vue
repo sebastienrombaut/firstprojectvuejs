@@ -11,7 +11,7 @@
     <p>Price per cookie : {{ price_per_cookie }} €</p>
 
     <div v-if="canBuyFactory">
-      <button @click="buyFactory">Acheter factory ?</button>
+      <button @click="buyFactory">Acheter factory ?</button> {{ factoryPrice }} €
     </div>
 
     <div>
@@ -19,9 +19,11 @@
     </div>
 
     <cookie-factory
+      :money="money"
       v-for="(i, index) in factories"
       :key="index"
-      @produceCookies="addCookies"/>
+      @produceCookies="addCookies"
+      @spendMoney="spendMoney"/>
   </div>
 </template>
 
@@ -91,6 +93,10 @@ export default {
         this.money -= this.factoryPrice
         this.factories.push(1)
       }
+    },
+
+    spendMoney (amount) {
+      this.money -= amount
     }
   },
 

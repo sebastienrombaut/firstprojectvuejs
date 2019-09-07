@@ -6,8 +6,8 @@ export default {
 
   loadProgression () {
     return {
-      nbCookies: parseInt(localStorage.getItem('nbCookies')),
-      money: parseInt(localStorage.getItem('money'))
+      nbCookies: parseInt(localStorage.getItem('nbCookies')) || 0,
+      money: parseInt(localStorage.getItem('money')) || 0
     }
   },
 }

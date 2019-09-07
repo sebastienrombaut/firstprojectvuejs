@@ -2,7 +2,7 @@
   <div class="game">
     <p>Bienvenue au jeu du cookie clicker</p>
 
-    <button class="button_cookie" @click="addCookies">
+    <button class="button_cookie" @click="addCookies(1)">
       <img class="cookie_image" src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRSBDKzOQPWkG8jDyo_ybq0uYzt98I7CSVR9RQrEAlqH4-qWyqy4w"/>
     </button>
 
@@ -20,7 +20,8 @@
 
     <cookie-factory
       v-for="(i, index) in factories"
-      :key="index"/>
+      :key="index"
+      @produceCookies="addCookies"/>
   </div>
 </template>
 
@@ -55,8 +56,8 @@ export default {
   },
 
   methods: {
-    addCookies () {
-      this.nbCookies += 1
+    addCookies (nb) {
+      this.nbCookies += nb
     },
 
     initBuyingTimer () {

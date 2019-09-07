@@ -19,6 +19,7 @@ export default {
     produceCookies () {
       this.produceCookiesTimerId = setInterval(() => { //arrow_function
         this.nbCookies += 2
+        this.$emit('produceCookies', 2)
       }, 1000)
     }
   },

@@ -11,7 +11,8 @@ export default {
   name: 'cookie-factory',
 
   props: [
-    'money'
+    'money',
+    'dataFactory'
   ],
 
   data () {
@@ -35,10 +36,25 @@ export default {
       this.cookiesProducedPerSecond += 1
       this.$emit('spendMoney', this.upgradePrice)
     },
+
+    dataToSave() {
+      return {
+        nbCookies: this.nbCookies,
+        produceCookiesTimerId: this.produceCookiesTimerId,
+        cookiesProducedPerSecond: this.cookiesProducedPerSecond,
+      }
+    },
+
+    initProgression() {
+      this.nbCookies = this.dataFactory.nbCookies
+      this.produceCookiesTimerId = this.dataFactory.produceCookiesTimerId
+      this.cookiesProducedPerSecond = this.dataFactory.cookiesProducedPerSecond
+    },
   },
 
   mounted () {
     this.produceCookies()
+    this.initProgression()
   },
 
   beforeDestroy () {

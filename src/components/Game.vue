@@ -20,10 +20,12 @@
 
     <cookie-factory
       :money="money"
-      v-for="(i, index) in factories"
+      v-for="(dataFactory, index) in factories"
+      :dataFactory=dataFactory
       :key="index"
       @produceCookies="addCookies"
-      @spendMoney="spendMoney"/>
+      @spendMoney="spendMoney"
+      ref="cookieFactories"/>
   </div>
 </template>
 
@@ -73,7 +75,8 @@ export default {
 
     initSaveTimer () {
       this.saveTimerId = setInterval(() => { //arrow_function
-        localStorage.saveProgression (this.nbCookies, this.money)
+        const factoriesData = this.$refs.cookieFactories.map((factory) => { return factory.dataToSave() })
+        localStorage.saveProgression (this.nbCookies, this.money, factoriesData)
       }, 1000)
     },
 
@@ -81,6 +84,7 @@ export default {
       const progression = localStorage.loadProgression()
       this.nbCookies = progression.nbCookies
       this.money = progression.money
+      this.factories = progression.factories
     },
 
     resetGame () {

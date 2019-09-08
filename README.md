@@ -1,5 +1,8 @@
 # hello_world
 
+## Prod url
+https://sebastienrombaut.github.io/firstprojectvuejs/
+
 ## Project setup
 ```
 npm install

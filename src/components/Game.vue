@@ -20,8 +20,8 @@
 
     <cookie-factory
       :money="money"
-      v-for="(dataFactory, index) in factories"
-      :dataFactory=dataFactory
+      v-for="(initDataFactory, index) in factories"
+      :initDataFactory=initDataFactory
       :key="index"
       @produceCookies="addCookies"
       @spendMoney="spendMoney"
@@ -75,7 +75,8 @@ export default {
 
     initSaveTimer () {
       this.saveTimerId = setInterval(() => { //arrow_function
-        const factoriesData = this.$refs.cookieFactories.map((factory) => { return factory.dataToSave() })
+        const factoriesData = (this.$refs.cookieFactories === undefined || this.$refs.cookieFactories.length === 0 ? [] : this.$refs.cookieFactories.map((factory) => { return factory.dataToSave() }))
+
         localStorage.saveProgression (this.nbCookies, this.money, factoriesData)
       }, 1000)
     },
@@ -90,18 +91,21 @@ export default {
     resetGame () {
       this.nbCookies = 0
       this.money = 0
+      this.factories = []
+    },
+
+    spendMoney (amount) {
+      if (this.money >= amount) {
+        this.money -= amount
+      }
     },
 
     buyFactory () {
       if (this.money >= this.factoryPrice) {
-        this.money -= this.factoryPrice
+        this.spendMoney(this.factoryPrice)
         this.factories.push(1)
       }
     },
-
-    spendMoney (amount) {
-      this.money -= amount
-    }
   },
 
   mounted () {

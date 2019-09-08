@@ -12,7 +12,7 @@ export default {
 
   props: [
     'money',
-    'dataFactory'
+    'initDataFactory'
   ],
 
   data () {
@@ -40,21 +40,19 @@ export default {
     dataToSave() {
       return {
         nbCookies: this.nbCookies,
-        produceCookiesTimerId: this.produceCookiesTimerId,
         cookiesProducedPerSecond: this.cookiesProducedPerSecond,
       }
     },
 
     initProgression() {
-      this.nbCookies = this.dataFactory.nbCookies
-      this.produceCookiesTimerId = this.dataFactory.produceCookiesTimerId
-      this.cookiesProducedPerSecond = this.dataFactory.cookiesProducedPerSecond
+      this.nbCookies = this.initDataFactory.nbCookies || this.nbCookies
+      this.cookiesProducedPerSecond = this.initDataFactory.cookiesProducedPerSecond || this.cookiesProducedPerSecond
     },
   },
 
   mounted () {
-    this.produceCookies()
     this.initProgression()
+    this.produceCookies()
   },
 
   beforeDestroy () {

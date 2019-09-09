@@ -7,8 +7,8 @@
     </button>
 
     <p>Unsold inventory : {{ nbCookies }}</p>
-    <p>Available funds : {{ money }} €</p>
-    <p>Price per cookie : {{ price_per_cookie }} €</p>
+    <p>Available funds : {{ money.toFixed(1) }} €</p>
+    <p>Price per cookie : {{ price_per_cookie.toFixed(1) }} € <button @click="raiseCookiePrice">Raise cookie price ?</button></p>
 
     <div v-if="canBuyFactory">
       <button @click="buyFactory">Acheter factory ?</button> {{ factoryPrice }} €
@@ -50,6 +50,7 @@ export default {
       saveTimerId: null,
       buyingTimerId: null,
       factories: [],
+      buyingCookieFrequency: 1000,
     }
   },
 
@@ -70,28 +71,33 @@ export default {
           this.nbCookies -= 1
           this.money += this.price_per_cookie
         }
-      }, 1000)
+      }, this.buyingCookieFrequency || 1000)
     },
 
     initSaveTimer () {
       this.saveTimerId = setInterval(() => { //arrow_function
         const factoriesData = (this.$refs.cookieFactories === undefined || this.$refs.cookieFactories.length === 0 ? [] : this.$refs.cookieFactories.map((factory) => { return factory.dataToSave() }))
 
-        localStorage.saveProgression (this.nbCookies, this.money, factoriesData)
+        localStorage.saveProgression (this.nbCookies, this.money, factoriesData, this.price_per_cookie, this.buyingCookieFrequency)
       }, 1000)
     },
 
     initProgression () {
       const progression = localStorage.loadProgression()
+      console.log(progression)
       this.nbCookies = progression.nbCookies
       this.money = progression.money
       this.factories = progression.factories
+      this.price_per_cookie = progression.price_per_cookie
+      this.buyingCookieFrequency = progression.buyingCookieFrequency
     },
 
     resetGame () {
       this.nbCookies = 0
       this.money = 0
       this.factories = []
+      this.price_per_cookie = 1
+      this.buyingCookieFrequency = 1000
     },
 
     spendMoney (amount) {
@@ -106,11 +112,19 @@ export default {
         this.factories.push(1)
       }
     },
+
+    raiseCookiePrice() {
+      this.price_per_cookie *= 1.1
+      this.buyingCookieFrequency += 1000
+
+      clearInterval(this.buyingTimerId)
+      this.initBuyingTimer()
+    },
   },
 
   mounted () {
-    this.initBuyingTimer()
     this.initProgression()
+    this.initBuyingTimer()
     this.initSaveTimer()
   },
 
